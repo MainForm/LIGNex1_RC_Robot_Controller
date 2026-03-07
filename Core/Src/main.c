@@ -47,6 +47,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+extern ADC_HandleTypeDef hadc1;
 
 /* USER CODE END PV */
 

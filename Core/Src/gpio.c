@@ -79,13 +79,13 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin : Mode_Change_Button_Pin */
   GPIO_InitStruct.Pin = Mode_Change_Button_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(Mode_Change_Button_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : Gripper_Button_Pin */
   GPIO_InitStruct.Pin = Gripper_Button_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(Gripper_Button_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
