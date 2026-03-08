@@ -9,7 +9,7 @@ class JoyStickController : public IController
 {
 public:
     JoyStickController() : m_hadc(nullptr){};
-    virtual ~JoyStickController();
+    virtual ~JoyStickController(){};
     void update(Data* data, uint8_t mode) override;
     void readJoyStickADC();
     void syncADC();

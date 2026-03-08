@@ -6,6 +6,7 @@
 #include "JoyStickController.hpp"
 #include "ServoController.hpp"
 #include "UGV_Packet.hpp"
+#include "stm32f1xx_hal_adc.h"
 
 #define MAX_MODULES 2
 #define DEBOUNCE_TIME 200
@@ -39,4 +40,14 @@ private:
     JoyStickController Joy_Controller;
     ServoController Servo_Controller;
 };
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+    void SystemManager_Init(ADC_HandleTypeDef* hadc);
+    void SystemManager_Run();
+#ifdef __cplusplus
+}
+#endif
+
 #endif

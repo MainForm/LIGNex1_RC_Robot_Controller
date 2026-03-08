@@ -9,7 +9,7 @@ class ServoController : public IController
 {
 public:
     ServoController() : m_hadc(nullptr){};
-    virtual ~ServoController();
+    virtual ~ServoController(){};
     void update(Data* data, uint8_t mode) override;
     void readServoADC();
     void syncADC();

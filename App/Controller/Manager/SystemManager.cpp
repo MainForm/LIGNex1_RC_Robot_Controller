@@ -15,7 +15,7 @@ void SystemManager::initSystem(ADC_HandleTypeDef* hadc)
     Joy_Controller.syncADC();
 
     Servo_Controller.readServoADC();
-    Joy_Controller.syncADC();
+    Servo_Controller.syncADC();
 
     // 디폴트 주행 모드
     Current_Controller = &Joy_Controller;
@@ -68,4 +68,16 @@ void SystemManager::updateLED(){
     
     // led 키기
     HAL_GPIO_WritePin(Driving_Mode_LED_GPIO_Port,LED_Pin_arr[Current_Mode],GPIO_PIN_SET);
+}
+
+
+SystemManager manager;
+void SystemManager_Init(ADC_HandleTypeDef *hadc)
+{
+    manager.initSystem(hadc);
+}
+
+void SystemManager_Run()
+{
+    manager.run();
 }

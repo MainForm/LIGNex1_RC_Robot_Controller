@@ -55,6 +55,8 @@ extern ADC_HandleTypeDef hadc1;
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
+void SystemManager_Init(ADC_HandleTypeDef* hadc);
+void SystemManager_Run(void);
 
 /* USER CODE END PFP */
 
@@ -114,16 +116,15 @@ int main(void)
   MX_USART1_UART_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-
-  
+  SystemManager_Init(&hadc1);
   /* USER CODE END 2 */
 
   /* Init scheduler */
-  osKernelInitialize();  /* Call init function for freertos objects (in cmsis_os2.c) */
-  MX_FREERTOS_Init();
+  //osKernelInitialize();  /* Call init function for freertos objects (in cmsis_os2.c) */
+  //MX_FREERTOS_Init();
 
   /* Start scheduler */
-  osKernelStart();
+  //osKernelStart();
 
   /* We should never get here as control is now taken by the scheduler */
 
@@ -131,7 +132,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+    SystemManager_Run();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
