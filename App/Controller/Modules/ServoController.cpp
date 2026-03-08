@@ -30,6 +30,7 @@ void ServoController::process()
 {
     uint32_t Current_Time = HAL_GetTick();
     Gripper_button = HAL_GPIO_ReadPin(Gripper_Button_GPIO_Port, Gripper_Button_Pin);
+    
     if(Gripper_button != Last_Gripper_button){
         if(Current_Time - Last_Time > DEBOUNCE_INTERVAL){
             this->Last_Gripper_button = Gripper_button;
