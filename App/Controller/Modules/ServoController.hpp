@@ -13,7 +13,7 @@ public:
     void update(Data* data, uint8_t mode) override;
     void readServoADC();
     void process();
-    void makePacket();
+    void makePacket(Data* data, uint8_t mode);
     void setADC(ADC_HandleTypeDef* m_hadc);
 
 private:

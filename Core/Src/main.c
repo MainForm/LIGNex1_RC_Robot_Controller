@@ -60,7 +60,24 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int __io_putchar(int ch)
+{
+ if ( ch == '\n' )
+	 HAL_UART_Transmit(&huart1, (uint8_t*)&"\r", 1, HAL_MAX_DELAY);
+ HAL_UART_Transmit(&huart1, (uint8_t*)&ch, 1, HAL_MAX_DELAY);
+ return ch;
+}
 
+int __io_getchar(void)
+{
+	uint8_t ch;
+
+	while( HAL_OK != HAL_UART_Receive(&huart1, &ch, 1, HAL_MAX_DELAY) )
+	{
+		;
+	}
+	return ch;
+}
 /* USER CODE END 0 */
 
 /**
