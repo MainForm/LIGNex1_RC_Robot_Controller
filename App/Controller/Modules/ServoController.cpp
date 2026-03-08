@@ -29,14 +29,20 @@ void ServoController::readServoADC()
 void ServoController::process()
 {
     uint32_t Current_Time = HAL_GetTick();
-    Gripper_button = HAL_GPIO_ReadPin(Gripper_Button_GPIO_Port, Gripper_Button_Pin);
+    uint8_t temp_Current_Val = HAL_GPIO_ReadPin(Gripper_Button_GPIO_Port, Gripper_Button_Pin);
     
-    if(Gripper_button != Last_Gripper_button){
+    // 한 번 누르면 계속 1이 유지 되는 것이 아니라 1 번만 1이 저장이 됨. 
+    // 50ms 미만일 때 무시(이전 누른 시간 vs 현재 누른 시간)
+
+    if(temp_Current_Val != Last_Gripper_button){
         if(Current_Time - Last_Time > DEBOUNCE_INTERVAL){
-            this->Last_Gripper_button = Gripper_button;
             Last_Time = Current_Time;
+            Last_Gripper_button = temp_Current_Val;
+    
+            if(temp_Current_Val == 1){
+                this->Gripper_button ^= 1;
+            }
         }
-        Last_Gripper_button = Gripper_button;
     }
     
     uint16_t diff_base = abs((int32_t)this->Prev_Base_Servo - (int32_t)this->Base_Servo);
