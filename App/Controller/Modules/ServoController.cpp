@@ -38,7 +38,6 @@ void ServoController::makePacket(Data* data, uint8_t mode)
 
     data->flags &= 0xFC;
     data->flags |= (mode << 1) | (this->Gripper_button & 0x01) 
-
 }
 
 void ServoController::setADC(ADC_HandleTypeDef* m_hadc)

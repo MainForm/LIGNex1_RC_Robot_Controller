@@ -33,8 +33,9 @@ void JoyStickController::makePacket(Data* data, uint8_t mode)
 {
     data->x_data = this->JoyStick_X;
     data->y_data = this->JoyStick_Y;
-    data->flags = mode << 1;
-}
+
+    data->flags &= ~(1<<1);
+    data->flags |= mode << 1;}
 
 void JoyStickController::setADC(ADC_HandleTypeDef* m_hadc)
 {
