@@ -7,8 +7,15 @@
 // main.c에서 hadc1을 가져와서 저장
 void SystemManager::initSystem(ADC_HandleTypeDef* hadc)
 {
+    // adc 주솟값 전달
     Joy_Controller.setADC(hadc);
     Servo_Controller.setADC(hadc);
+
+    Joy_Controller.readJoyStickADC();
+    Joy_Controller.syncADC();
+
+    Servo_Controller.readServoADC();
+    Joy_Controller.syncADC();
 
     // 디폴트 주행 모드
     Current_Controller = &Joy_Controller;
