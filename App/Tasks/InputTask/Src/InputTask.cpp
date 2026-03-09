@@ -6,6 +6,7 @@ extern "C"
 void InputTaskHandler(void *argument){
 
     for(;;){
+        
         osDelay(1);
     }
 }
