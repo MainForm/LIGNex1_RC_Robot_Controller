@@ -2,13 +2,13 @@
 #include "Servo_Dispatch.hpp"
 #include "DataConfig.hpp"
 
-#if __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
     #include "main.h"
     #include "cmsis_os2.h"
     #include <string.h>
-#if __cplusplus
+#ifdef __cplusplus
 }
 #endif
 

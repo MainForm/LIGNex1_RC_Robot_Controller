@@ -18,7 +18,8 @@ class BleRx : public IRx{
         osMessageQueueId_t servo_q;
         osMessageQueueId_t moter_q;
         uint8_t rx_buf[RX_BUF_SIZE];
-        uint8_t tmp[RX_BUF_SIZE];
+        //uint8_t tmp[RX_BUF_SIZE];
+        uint8_t *tmp;
         uint16_t rx_old_pos;
         IDataProcessor *processor;
         uint8_t receive_flag;

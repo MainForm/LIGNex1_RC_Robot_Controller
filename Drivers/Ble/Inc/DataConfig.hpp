@@ -1,13 +1,13 @@
 #ifndef __DATACONFIG_HPP__
 #define __DATACONFIG_HPP__
 
-#if __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
     #include <stdint.h>
     #include "usart.h"
     #include "cmsis_os.h"
-#if __cplusplus
+#ifdef __cplusplus
 }
 #endif
 //RC Car에서는 RC_Car = 1, RC_Controller = 0
@@ -30,7 +30,7 @@ extern "C" {
 //UART 설정
 //*****************************//
 //디버깅 용 UART 설정
-#define DEBUG_UART_NUM 0
+#define DEBUG_UART_NUM 2
 
 //BLE용 UART 설정
 #define RX_UART_NUM 1
@@ -75,6 +75,9 @@ extern "C" {
 
 
 
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 extern UART_HandleTypeDef huart1;
 extern osMessageQueueId_t RxQhandleHandle;
@@ -82,6 +85,9 @@ extern osMessageQueueId_t RxQhandleHandle;
 #if RC_Car
 extern osMessageQueueId_t ServoQHandle;
 extern osMessageQueueId_t MoterQHandle;
+#endif
+#ifdef __cplusplus
+}
 #endif
 
 #if RC_Car

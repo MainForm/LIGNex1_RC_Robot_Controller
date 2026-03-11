@@ -2,13 +2,13 @@
 #include "Moter_Dispatch.hpp"
 #include "DataConfig.hpp"
 
-#if __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
     #include <string.h>
     #include "main.h"
     #include "usart.h"
-#if __cplusplus
+#ifdef __cplusplus
 }
 #endif
 

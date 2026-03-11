@@ -8,25 +8,6 @@ extern "C"{
 
 BleRx* BleRx::instance = nullptr;
 
-//반드시 Interrupt 설정 필요함
-//#include "cmsis_os2.h"
-// static uint8_t Rxflag = 1;
-// void USART1_IRQHandler(void)
-// {
-//   /* USER CODE BEGIN USART1_IRQn 0 */
-//   if (__HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE) != RESET){
-//     __HAL_UART_CLEAR_IDLEFLAG(&huart1);
-    
-//     osMessageQueuePut(RxQhandleHandle, &Rxflag, 0, 0);
-//     Rxflag = 0;
-//   }
-//   /* USER CODE END USART1_IRQn 0 */
-//   HAL_UART_IRQHandler(&huart1);
-//   /* USER CODE BEGIN USART1_IRQn 1 */
-
-//   /* USER CODE END USART1_IRQn 1 */
-// }
-
 // Init_type 구조체에 데이터 저장 후 주소값 전달할것
 void BleRx::Init(void *argument){
     huart = RX_HUART;
@@ -72,6 +53,7 @@ bool BleRx::check_cs(uint8_t *ptr, uint8_t size){
 
     // checksum 비교
     if (checksum == ptr[idx + Packet_len - 1]){
+        tmp = &ptr[idx];
         return true;
     }
 
@@ -82,6 +64,7 @@ bool BleRx::check_cs(uint8_t *ptr, uint8_t size){
 void BleRx::GetFromRx(void *argument){
     osStatus_t st = osMessageQueueGet(this->qhandle, &receive_flag, NULL, osWaitForever);
     if (st == osOK && check_cs(rx_buf, receive_flag)){
+        HAL_UART_Transmit(DEBUG_HUART, tmp, Packet_len, 20);
         Data *data = (Data*)(processor->Decoding(tmp));
         #if RC_Car
         if (data->mode_data == arm){
@@ -120,9 +103,17 @@ void BleRx::Callback(UART_HandleTypeDef *huart, uint8_t Size){
 }
 
 void BleRx::OnRxEvent(uint8_t size){
-    osMessageQueuePut(COM_QUEUE, &size, 0, 0);
+
+    volatile osStatus_t st = osMessageQueuePut(this->qhandle, &size, 0, 0);
     HAL_UARTEx_ReceiveToIdle_DMA(huart, rx_buf, RX_BUF_SIZE);
 }
 BleRx::~BleRx(){
     delete processor;
+} 
+
+extern "C" void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+    if (huart == RX_HUART){
+        BleRx::Callback(huart, (uint8_t)Size);
+    }
 }
