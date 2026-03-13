@@ -16,12 +16,16 @@ extern "C" {
 void BleTx::Init(void *argument){
     huart = TX_HUART;
     processor = new PacketCodec;
+    tx_busy = false;
 }
 
 void BleTx::SendToTx(void *argument){
     Data *data = static_cast<Data*>(argument);
-    uint8_t *buf = (uint8_t*)(processor->Encoding(data));
-    HAL_UART_Transmit(huart, buf, Packet_len, 15);
+    if (huart->gState != HAL_UART_STATE_READY){
+        return;   
+    }
+    buf = (uint8_t*)(processor->Encoding(data));
+    HAL_UART_Transmit_DMA(huart, buf, Packet_len);
 }
 
 BleTx::~BleTx(){

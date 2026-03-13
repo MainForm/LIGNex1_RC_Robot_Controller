@@ -2,9 +2,14 @@
 #include "PacketCodec.hpp"
 #include "DataConfig.hpp"
 
+#ifdef __cplusclus
 extern "C"{
+#endif
     #include "main.h"
+    #include <string.h>
+#ifdef __cplusclus
 }
+#endif
 
 BleRx* BleRx::instance = nullptr;
 
@@ -105,6 +110,10 @@ void BleRx::Callback(UART_HandleTypeDef *huart, uint8_t Size){
 void BleRx::OnRxEvent(uint8_t size){
 
     volatile osStatus_t st = osMessageQueuePut(this->qhandle, &size, 0, 0);
+    if (st != osOK){
+        const char *msg = "[Queue] : errer\n";
+        HAL_UART_Transmit(DEBUG_HUART, (uint8_t*)msg, strlen(msg), 10);
+    }
     HAL_UARTEx_ReceiveToIdle_DMA(huart, rx_buf, RX_BUF_SIZE);
 }
 BleRx::~BleRx(){
