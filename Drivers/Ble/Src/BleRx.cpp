@@ -20,6 +20,10 @@ void BleRx::Init(void *argument){
 #if RC_Car
     servo_q = SERVO_QUEUE;
     moter_q = MOTER_QUEUE;
+    //
+    Tx = new BleTx();
+    Tx->Init(nullptr);
+    //
 #endif
     instance = this;
 
@@ -69,9 +73,12 @@ bool BleRx::check_cs(uint8_t *ptr, uint8_t size){
 void BleRx::GetFromRx(void *argument){
     osStatus_t st = osMessageQueueGet(this->qhandle, &receive_flag, NULL, osWaitForever);
     if (st == osOK && check_cs(rx_buf, receive_flag)){
-        HAL_UART_Transmit(DEBUG_HUART, tmp, Packet_len, 20);
         Data *data = (Data*)(processor->Decoding(tmp));
+        HAL_UART_Transmit(DEBUG_HUART, tmp, Packet_len, 20);
         #if RC_Car
+        //
+        Tx->SendToTx(data);
+        //
         if (data->mode_data == arm){
             Servo_type servo = {
                 .servo_top  = data->servo_top,
@@ -91,7 +98,7 @@ void BleRx::GetFromRx(void *argument){
         }
         #else
         if (data->mode_data == ack_driving){
-            //HAL_GPIO_WritePin(~~);
+            HAL_GPIO_WritePin(GPIO_PORT)
         }
         else if (data->mode_data == ack_arm){
             //HAL_GPIO_WritePin(~~);

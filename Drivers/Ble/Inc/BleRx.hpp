@@ -9,6 +9,8 @@ extern "C"{
 #include "IRx.hpp"
 #include "DataConfig.hpp"
 #include "IDataProcessor.hpp"
+#include "ITx.hpp"
+#include "BleTx.hpp"
 
 
 class BleRx : public IRx{
@@ -23,6 +25,8 @@ class BleRx : public IRx{
         IDataProcessor *processor;
         uint8_t receive_flag;
         static BleRx *instance;
+        ITx *Tx;
+
 
         uint16_t uart_dma_read(void *);
         bool check_cs(uint8_t *, uint8_t);
