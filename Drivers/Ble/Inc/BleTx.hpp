@@ -21,14 +21,5 @@ class BleTx : public ITx{
          ~BleTx();
 };
 
-// class Tx_RC : public ITx{
-//     private:
-//         UART_HandleTypeDef *huart;
-//         uint8_t *buf;
-//     public:
-//         void Init(void *) override;
-//         void SendToTx(void *) override;
-//         ~Tx_RC();
-// };
 
 #endif

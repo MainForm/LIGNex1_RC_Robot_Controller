@@ -87,6 +87,7 @@ void BleRx::GetFromRx(void *argument){
                 .gripper    = data->gripper
             };
             osMessageQueuePut(moter_q, &servo, 0, 10);
+            Tx->SendToTx(data);
         }
         else if(data->mode_data == driving || data->mode_data == rotate){
             Moter_type moter = {
@@ -95,9 +96,10 @@ void BleRx::GetFromRx(void *argument){
                 .moter_y    = data->moter_y
             };
             osMessageQueuePut(servo_q, &moter, 0, 10);
+            Tx->SendToTx(data);
         }
         #else
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+        //HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
         if (data->mode_data == ack_driving){
             HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);
         }

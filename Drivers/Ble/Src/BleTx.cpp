@@ -32,14 +32,3 @@ BleTx::~BleTx(){
     delete processor;
 }
 
-void Tx_RC::Init(void *argument){
-    huart = TX_HUART;
-}
-
-void Tx_RC::SendToTx(void *argument){
-    buf = static_cast<uint8_t*>(argument);
-    if (huart->gState != HAL_UART_STATE_READY){
-        return;
-    }
-    HAL_UART_Transmit_DMA(huart, buf, 1);
-}
