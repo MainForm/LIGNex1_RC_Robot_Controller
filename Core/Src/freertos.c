@@ -25,11 +25,12 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "ControllerData.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 typedef StaticTask_t osStaticThreadDef_t;
+typedef StaticQueue_t osStaticMessageQDef_t;
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -60,18 +61,6 @@ const osThreadAttr_t InputTask_attributes = {
   .stack_size = sizeof(InputTaskBuffer),
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for BlueToothTxTask */
-osThreadId_t BlueToothTxTaskHandle;
-uint32_t BlueToothTxHandlerBuffer[ 128 ];
-osStaticThreadDef_t BlueToothTxHandlerControlBlock;
-const osThreadAttr_t BlueToothTxTask_attributes = {
-  .name = "BlueToothTxTask",
-  .cb_mem = &BlueToothTxHandlerControlBlock,
-  .cb_size = sizeof(BlueToothTxHandlerControlBlock),
-  .stack_mem = &BlueToothTxHandlerBuffer[0],
-  .stack_size = sizeof(BlueToothTxHandlerBuffer),
-  .priority = (osPriority_t) osPriorityLow,
-};
 /* Definitions for BluetoothRxTask */
 osThreadId_t BluetoothRxTaskHandle;
 uint32_t BluetoothRxTaskBuffer[ 128 ];
@@ -84,6 +73,17 @@ const osThreadAttr_t BluetoothRxTask_attributes = {
   .stack_size = sizeof(BluetoothRxTaskBuffer),
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for RxQhandle */
+osMessageQueueId_t RxQhandleHandle;
+uint8_t RxQhandleBuffer[ 16 * sizeof( Data ) ];
+osStaticMessageQDef_t RxQhandleControlBlock;
+const osMessageQueueAttr_t RxQhandle_attributes = {
+  .name = "RxQhandle",
+  .cb_mem = &RxQhandleControlBlock,
+  .cb_size = sizeof(RxQhandleControlBlock),
+  .mq_mem = &RxQhandleBuffer,
+  .mq_size = sizeof(RxQhandleBuffer)
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -91,7 +91,6 @@ const osThreadAttr_t BluetoothRxTask_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void InputTaskHandler(void *argument);
-extern void BlueToothTxTaskHandler(void *argument);
 extern void BluetoothRxTaskHandler(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -118,6 +117,10 @@ void MX_FREERTOS_Init(void) {
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of RxQhandle */
+  RxQhandleHandle = osMessageQueueNew (16, sizeof(Data), &RxQhandle_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -125,9 +128,6 @@ void MX_FREERTOS_Init(void) {
   /* Create the thread(s) */
   /* creation of InputTask */
   InputTaskHandle = osThreadNew(InputTaskHandler, NULL, &InputTask_attributes);
-
-  /* creation of BlueToothTxTask */
-  BlueToothTxTaskHandle = osThreadNew(BlueToothTxTaskHandler, NULL, &BlueToothTxTask_attributes);
 
   /* creation of BluetoothRxTask */
   BluetoothRxTaskHandle = osThreadNew(BluetoothRxTaskHandler, NULL, &BluetoothRxTask_attributes);
