@@ -97,11 +97,12 @@ void BleRx::GetFromRx(void *argument){
             osMessageQueuePut(servo_q, &moter, 0, 10);
         }
         #else
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
         if (data->mode_data == ack_driving){
-            HAL_GPIO_WritePin(GPIO_PORT)
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);
         }
         else if (data->mode_data == ack_arm){
-            //HAL_GPIO_WritePin(~~);
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
         }
         else
         {}

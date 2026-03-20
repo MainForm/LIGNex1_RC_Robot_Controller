@@ -18,7 +18,6 @@ void BluetoothRxTaskHandler(void *argument){
     IRx *Rx = new BleRx();
     Rx->Init(nullptr);
     for(;;){
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
         Rx->GetFromRx(nullptr);
     }
 }
